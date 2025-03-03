@@ -3,9 +3,8 @@
 # Configuration variables
 
 SOLVER_SIZE=200
-NUM_ITERATIONS=40000
+NUM_ITERATIONS=5000
 VISUALIZE=false
-MAX_LOSS_INCREASE=0.01 # 0.1 default
 CSV_FILE=polylite-abs-owned.csv
 
 source venv/bin/activate
@@ -29,8 +28,6 @@ for img in "${image_list[@]}"; do
         --output_folder="out/$name"
         --iterations=$NUM_ITERATIONS
         --solver_size=$SOLVER_SIZE
-        --pruning_max_loss_increase=$MAX_LOSS_INCREASE
-        --num_bands=10
     )
 
     # Add visualization flag if enabled
