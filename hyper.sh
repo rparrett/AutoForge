@@ -1,16 +1,23 @@
 #!/bin/bash
 
 # Configuration variables
-IMAGE_INDEX=0  # Index of the image to process (0-based)
+IMAGE_INDEX=3  # Index of the image to process (0-based)
 SOLVER_SIZE=200
 VISUALIZE=false
 CSV_FILE=polylite-abs-owned.csv
-ITERATIONS_VALUES=(2000 4000 8000 16000 32000 64000 128000)
+ITERATIONS_VALUES=(1000 2000 3000 4000)
 
 source venv/bin/activate
 
 # Get jpg/jpeg images from "in" dir
 image_list=($(ls in/*.{jpg,jpeg} 2>/dev/null))
+
+# Display available images with their indices
+echo "Available images:"
+for i in "${!image_list[@]}"; do
+    echo "[$i] ${image_list[$i]}"
+done
+echo
 
 # Check if the selected index is valid
 if [ $IMAGE_INDEX -ge ${#image_list[@]} ]; then
@@ -27,7 +34,7 @@ name="${filename%.*}"
 
 # Iterate over max_tau values
 for iterations in "${ITERATIONS_VALUES[@]}"; do
-    echo "Processing with min_tau = $min_tau"
+    echo "Processing with min_tau = $iterations"
     
     # Create output directory with max_tau suffix
     out_dir="out/${name}_tau${max_tau}"
@@ -40,7 +47,7 @@ for iterations in "${ITERATIONS_VALUES[@]}"; do
         --output_folder="$out_dir"
         --iterations=$iterations
         --solver_size=$SOLVER_SIZE
-        --random_seed=0
+        --random_seed=24
     )
 
     # Add visualization flag if enabled
@@ -49,5 +56,7 @@ for iterations in "${ITERATIONS_VALUES[@]}"; do
     fi
 
     # Run autoforge
+    set -x
     PYTHONPATH=src python -m autoforge "${args[@]}"
+    set +x
 done
