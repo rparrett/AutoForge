@@ -5,7 +5,7 @@ IMAGE_INDEX=3  # Index of the image to process (0-based)
 SOLVER_SIZE=200
 VISUALIZE=false
 CSV_FILE=polylite-abs-owned.csv
-ITERATIONS_VALUES=(1000 2000 3000 4000)
+EXPERIMENT_VALUE=(2 3 4)
 
 source venv/bin/activate
 
@@ -33,11 +33,11 @@ filename=$(basename "$img")
 name="${filename%.*}"
 
 # Iterate over max_tau values
-for iterations in "${ITERATIONS_VALUES[@]}"; do
+for experiment in "${EXPERIMENT_VALUE[@]}"; do
     echo "Processing with min_tau = $iterations"
     
     # Create output directory with max_tau suffix
-    out_dir="out/${name}_tau${max_tau}"
+    out_dir="out/${name}_${experiment}"
     mkdir -p "$out_dir"
 
     # Build command arguments
@@ -45,9 +45,10 @@ for iterations in "${ITERATIONS_VALUES[@]}"; do
         --input_image="$img"
         --csv_file=$CSV_FILE
         --output_folder="$out_dir"
-        --iterations=$iterations
+        --iterations=4000
         --solver_size=$SOLVER_SIZE
         --random_seed=24
+        --warmup=$experiment
     )
 
     # Add visualization flag if enabled
