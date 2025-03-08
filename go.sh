@@ -29,7 +29,6 @@ for img in "${image_list[@]}"; do
         --output_folder="out/$name"
         --iterations=$NUM_ITERATIONS
         --solver_size=$SOLVER_SIZE
-        --random_seed=0
     )
 
     # Add visualization flag if enabled
