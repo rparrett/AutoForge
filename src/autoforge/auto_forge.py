@@ -396,6 +396,10 @@ def main():
         for line in swap_instructions:
             f.write(line + "\n")
 
+    # Loss value
+    with open(os.path.join(args.output_folder, "loss.txt"), "w") as f:
+        f.write(f"Final loss: {optimizer.best_discrete_loss:.6f}\n")
+
     # Project file
     project_filename = os.path.join(args.output_folder, "project_file.hfp")
     generate_project_file(
