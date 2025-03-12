@@ -1,6 +1,7 @@
 # Lists all directories in the 'out' folder sorted by their loss values (highest to lowest)
 
 from pathlib import Path
+import os
 
 def get_loss(dir_path):
     try:
@@ -26,6 +27,33 @@ def main():
     max_len = max(len(name) for name, _ in dir_losses)
     for name, loss in dir_losses:
         print(f"{name:<{max_len}} {loss:>10.6f}")
+
+    generate_html_report(dir_losses)
+
+def generate_html_report(dir_losses):
+    html_content = """
+    <html>
+    <head><title>Loss Report</title></head>
+    <body>
+    <h1>Loss Report</h1>
+    <table border="1">
+        <tr><th>Directory</th><th>Loss</th><th>Model Image</th></tr>
+    """
+
+    for name, loss in dir_losses:
+        dir_path = os.path.abspath(Path('out') / name)
+        img_path = Path('out') / name / 'final_model.png'
+        img_tag = f'<img src="{img_path}" alt="Model Image" width="100">' if img_path.exists() else 'No Image'
+        html_content += f"<tr><td><a href='file://{dir_path}'>{name}</a></td><td>{loss:.6f}</td><td>{img_tag}</td></tr>"
+
+    html_content += """
+    </table>
+    </body>
+    </html>
+    """
+
+    with open('loss_report.html', 'w') as f:
+        f.write(html_content)
 
 if __name__ == "__main__":
     main()
