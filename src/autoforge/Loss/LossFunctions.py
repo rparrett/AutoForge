@@ -93,3 +93,29 @@ def compute_loss(
     else:
         total_loss = mse_loss
     return total_loss
+
+def calculate_normalized_mse(image1: torch.Tensor, image2: torch.Tensor) -> torch.Tensor:
+    """
+    Calculate Normalized Mean Squared Error (NMSE) between two images.
+    
+    Args:
+        image1: The first image tensor.
+        image2: The second image tensor.
+        
+    Returns:
+        Normalized MSE value.
+    """
+    # Ensure the images are of the same shape
+    if image1.shape != image2.shape:
+        raise ValueError("Input images must have the same shape")
+    
+    # Compute MSE (Mean Squared Error)
+    mse = torch.mean((image1 - image2) ** 2)
+    
+    # Find the max pixel value in the input images
+    max_pixel_value = torch.max(torch.cat([image1.view(-1), image2.view(-1)]))
+    
+    # Compute Normalized MSE
+    nmse = mse / (max_pixel_value ** 2)
+    
+    return nmse

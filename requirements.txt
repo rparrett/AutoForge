@@ -9,3 +9,4 @@ pandas>=1.1.0
 scikit-image
 scikit-learn
 tensorboard
+trimesh>=4.6.4

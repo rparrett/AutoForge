@@ -21,6 +21,7 @@ from autoforge.Helper.OutputHelper import (
     generate_swap_instructions,
     generate_project_file,
 )
+from autoforge.Loss.LossFunctions import calculate_normalized_mse
 from autoforge.Modules.Optimizer import FilamentOptimizer
 
 
@@ -397,8 +398,10 @@ def main():
             f.write(line + "\n")
 
     # Loss value
+    nmse = calculate_normalized_mse(comp_disc, output_target)
     with open(os.path.join(args.output_folder, "loss.txt"), "w") as f:
-        f.write(f"Final loss: {optimizer.best_discrete_loss:.6f}\n")
+        #f.write(f"Final loss: {optimizer.best_discrete_loss:.6f}\n")
+        f.write(f"Final loss: {nmse:.6f}\n")
 
     # Project file
     project_filename = os.path.join(args.output_folder, "project_file.hfp")
